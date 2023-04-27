@@ -30,6 +30,22 @@ def get_restaurants():
         response.append(restaurant_dict)
     return jsonify(response), 200
 
+@restaurant_bp.route("/<id>", methods=["GET"])
+def get_one_restaurant(id):
+    
+    try:
+        restaurant_id = int(id)
+    except ValueError:
+        return {"message": f"invalid id: {id}"}, 400
 
+    for restaurant in restaurants:
+        if restaurant.id == restaurant_id:
+            return jsonify({
+            "id": restaurant.id,
+            "name": restaurant.name,
+            "rating": restaurant.rating,
+            "cuisine": restaurant.cuisine,
+            "distance_from_ada": restaurant.distance_from_ada
+        }), 200
 
-
+    return {"message": f"id {restaurant_id} not found"}, 404
